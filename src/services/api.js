@@ -12,5 +12,8 @@ export const fetchPhotosByKeyWord = async (query, pageNumber) => {
   const { data } = await axios.get(
     `${BASE_URL}?q=${query}&key=${API_KEY}&${params}&page=${pageNumber}`
   );
+  console.log(
+    `${BASE_URL}?q=${query}&key=${API_KEY}&${params}&page=${pageNumber}`
+  );
   return data;
 };
