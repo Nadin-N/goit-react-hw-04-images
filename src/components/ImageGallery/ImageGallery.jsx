@@ -20,7 +20,7 @@ export const ImageGallery = ({ photos, onItemClick }) => {
   );
 };
 
-ImageGallery.PropTypes = {
+ImageGallery.propTypes = {
   photos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

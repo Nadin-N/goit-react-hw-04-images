@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { ThreeCircles } from 'react-loader-spinner';
 import css from './Loader.module.css';
 
