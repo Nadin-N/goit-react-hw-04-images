@@ -25,7 +25,7 @@ export class App extends Component {
     if (prevState.keyWord !== keyWord || prevState.page !== page) {
       this.setState({ isLoading: true, isFetchedArrayEmpty: false });
       try {
-        const { hits, total } = await fetchPhotosByKeyWord(keyWord, page);
+        const { hits, totalHits } = await fetchPhotosByKeyWord(keyWord, page);
         if (hits.length === 0) {
           this.setState({ isFetchedArrayEmpty: true });
           return;
@@ -33,7 +33,7 @@ export class App extends Component {
         this.setState(prevState => ({
           photos: [...prevState.photos, ...hits],
 
-          LoadMoreIsVisible: page < Math.ceil(total / 12),
+          LoadMoreIsVisible: page < Math.ceil(totalHits / 12),
         }));
       } catch (error) {
         this.setState({ error: error.message });
@@ -57,6 +57,7 @@ export class App extends Component {
   };
   handleButton = () => {
     this.setState(prevState => ({ page: (prevState.page += 1) }));
+    //  console.log(this.state.page);
   };
 
   onItemClick = largeImageURL => {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_KEY = '32900750-5d55daf97b577b91954971888';
-const BASE_URL = 'https://pixabay.com/api/';
+const BASE_URL = 'http://pixabay.com/api/';
 const params = new URLSearchParams({
   image_type: 'photo',
   orientation: 'horizontal',
