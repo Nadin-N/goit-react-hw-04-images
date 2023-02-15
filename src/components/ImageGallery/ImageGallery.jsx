@@ -19,3 +19,15 @@ export const ImageGallery = ({ photos, onItemClick }) => {
     </ul>
   );
 };
+
+ImageGallery.PropTypes = {
+  photos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  onItemClick: PropTypes.func.isRequired,
+};
