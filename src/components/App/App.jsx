@@ -56,7 +56,7 @@ export class App extends Component {
     });
   };
   handleButton = () => {
-    this.setState(prevState => ({ page: (prevState.page += 1) }));
+    this.setState(prevState => ({ page: prevState.page + 1 }));
     //  console.log(this.state.page);
   };
 
