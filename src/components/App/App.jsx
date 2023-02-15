@@ -13,7 +13,7 @@ export class App extends Component {
     photos: [],
     page: 1,
     isLoading: false,
-    LoadMoreIsVisible: false,
+    loadMoreIsVisible: false,
     isModalOpen: false,
     error: '',
     isFetchedArrayEmpty: false,
@@ -33,7 +33,7 @@ export class App extends Component {
         this.setState(prevState => ({
           photos: [...prevState.photos, ...hits],
 
-          LoadMoreIsVisible: page < Math.ceil(totalHits / 12),
+          loadMoreIsVisible: page < Math.ceil(totalHits / 12),
         }));
       } catch (error) {
         this.setState({ error: error.message });
@@ -49,7 +49,7 @@ export class App extends Component {
       photos: [],
       page: 1,
       isLoading: false,
-      LoadMoreIsVisible: false,
+      loadMoreIsVisible: false,
       isModalOpen: false,
       error: '',
       isFetchedArrayEmpty: false,
@@ -72,7 +72,7 @@ export class App extends Component {
     const {
       photos,
       isLoading,
-      LoadMoreIsVisible,
+      loadMoreIsVisible,
       isModalOpen,
       error,
       isFetchedArrayEmpty,
@@ -98,7 +98,7 @@ export class App extends Component {
           {photos.length > 0 && (
             <ImageGallery photos={photos} onItemClick={this.onItemClick} />
           )}
-          {LoadMoreIsVisible && <Button onLoadMore={this.handleButton} />}
+          {loadMoreIsVisible && <Button onLoadMore={this.handleButton} />}
           {isModalOpen && (
             <Modal
               largeImageURL={largeImageURL}
