@@ -26,7 +26,7 @@ export class Modal extends Component {
       <div className={css.Overlay} onClick={this.handleBackDrop}>
         <div className={css.Modal}>
           <p>Hello</p>
-          <img src={this.props.largeImageURL} alt="Large photo" />
+          <img src={this.props.largeImageURL} alt="Large" />
         </div>
       </div>
     );
