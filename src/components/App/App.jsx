@@ -23,7 +23,7 @@ export class App extends Component {
   async componentDidUpdate(_, prevState) {
     const { keyWord, page } = this.state;
     if (prevState.keyWord !== keyWord || prevState.page !== page) {
-      this.setState({ isLoading: true, isFetchedArrayEmpty: false });
+      this.setState({ isLoading: true });
       try {
         const { hits, totalHits } = await fetchPhotosByKeyWord(keyWord, page);
         if (hits.length === 0) {
@@ -57,7 +57,6 @@ export class App extends Component {
   };
   handleButton = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
-    //  console.log(this.state.page);
   };
 
   onItemClick = largeImageURL => {
@@ -92,7 +91,7 @@ export class App extends Component {
           )}
           {isFetchedArrayEmpty && (
             <p className={css.Notify}>
-              Sorry, there is no images for your request
+              Sorry, there are no images for your request
             </p>
           )}
           {photos.length > 0 && (
