@@ -89,12 +89,11 @@ export class App extends Component {
               Sorry, an error occurred! Error: {error} Please try again later
             </p>
           )}
-          {isFetchedArrayEmpty && (
+          {isFetchedArrayEmpty ? (
             <p className={css.Notify}>
               Sorry, there are no images for your request
             </p>
-          )}
-          {photos.length > 0 && (
+          ) : (
             <ImageGallery photos={photos} onItemClick={this.onItemClick} />
           )}
           {loadMoreIsVisible && <Button onLoadMore={this.handleButton} />}
