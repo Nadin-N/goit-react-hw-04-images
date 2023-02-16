@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { fetchPhotosByKeyWord } from 'services/api';
 import css from './App.module.css';
 import { Searchbar } from 'components/Searchbar/Searchbar';
@@ -7,104 +7,86 @@ import { Button } from 'components/Button/Button';
 import { Loader } from 'components/Loader/Loader';
 import { Modal } from 'components/Modal/Modal';
 
-export class App extends Component {
-  state = {
-    keyWord: '',
-    photos: [],
-    page: 1,
-    isLoading: false,
-    loadMoreIsVisible: false,
-    isModalOpen: false,
-    error: '',
-    isFetchedArrayEmpty: false,
-    largeImageURL: '',
-  };
+export function App() {
+  const [keyword, setKeyword] = useState('');
+  const [photos, setPhotos] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadMoreIsVisible, setLoadMoreIsVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState('');
+  const [isFetchedArrayEmpty, setIsFetchedArrayEmpty] = useState(false);
+  const [largeImageURL, setLargeImageURL] = useState('');
 
-  async componentDidUpdate(_, prevState) {
-    const { keyWord, page } = this.state;
-    if (prevState.keyWord !== keyWord || prevState.page !== page) {
-      this.setState({ isLoading: true });
+  useEffect(() => {
+    if (!keyword) return;
+
+    const getPhotos = async () => {
       try {
-        const { hits, totalHits } = await fetchPhotosByKeyWord(keyWord, page);
+        setIsLoading(true);
+        const { hits, totalHits } = await fetchPhotosByKeyWord(keyword, page);
         if (hits.length === 0) {
-          this.setState({ isFetchedArrayEmpty: true });
+          setIsFetchedArrayEmpty(true);
           return;
         }
-        this.setState(prevState => ({
-          photos: [...prevState.photos, ...hits],
-
-          loadMoreIsVisible: page < Math.ceil(totalHits / 12),
-        }));
-      } catch (error) {
-        this.setState({ error: error.message });
+        setPhotos(prevState => [...prevState, ...hits]);
+        setLoadMoreIsVisible(page < Math.ceil(totalHits / 12));
+      } catch (err) {
+        setError(err.message);
       } finally {
-        this.setState({ isLoading: false });
+        setIsLoading(false);
       }
-    }
-  }
+    };
+    getPhotos();
+  }, [page, keyword]);
 
-  setKeyWord = keyWord => {
-    this.setState({
-      keyWord,
-      photos: [],
-      page: 1,
-      isLoading: false,
-      loadMoreIsVisible: false,
-      isModalOpen: false,
-      error: '',
-      isFetchedArrayEmpty: false,
-    });
-  };
-  handleButton = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+  const setKeyWord = keyWord => {
+    setKeyword(keyWord);
+    setPhotos([]);
+    setPage(1);
+    setIsLoading(false);
+    setLoadMoreIsVisible(false);
+    setIsModalOpen(false);
+    setError('');
+    setIsFetchedArrayEmpty(false);
   };
 
-  onItemClick = largeImageURL => {
-    this.setState({ largeImageURL, isModalOpen: true });
+  const handleButton = () => {
+    setPage(prevState => prevState + 1);
   };
 
-  handleModal = () => {
-    this.setState({ isModalOpen: false });
+  const handleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
-  render() {
-    const {
-      photos,
-      isLoading,
-      loadMoreIsVisible,
-      isModalOpen,
-      error,
-      isFetchedArrayEmpty,
-      largeImageURL,
-    } = this.state;
-    return (
-      <>
-        {isLoading && <Loader />}
+  const onItemClick = largeImageURL => {
+    setLargeImageURL(largeImageURL);
+    handleModal();
+  };
+  return (
+    <>
+      {isLoading && <Loader />}
 
-        <section className={css.App}>
-          <Searchbar onSubmit={this.setKeyWord} />
+      <section className={css.App}>
+        <Searchbar onSubmit={setKeyWord} />
 
-          {error && (
-            <p className={css.Notify}>
-              Sorry, an error occurred! Error: {error} Please try again later
-            </p>
-          )}
-          {isFetchedArrayEmpty ? (
-            <p className={css.Notify}>
-              Sorry, there are no images for your request
-            </p>
-          ) : (
-            <ImageGallery photos={photos} onItemClick={this.onItemClick} />
-          )}
-          {loadMoreIsVisible && <Button onLoadMore={this.handleButton} />}
-          {isModalOpen && (
-            <Modal
-              largeImageURL={largeImageURL}
-              handleModal={this.handleModal}
-            />
-          )}
-        </section>
-      </>
-    );
-  }
+        {error && (
+          <p className={css.Notify}>
+            Sorry, an error occurred! Error: {error} Please try again later
+          </p>
+        )}
+        {isFetchedArrayEmpty ? (
+          <p className={css.Notify}>
+            Sorry, there are no images for your request
+          </p>
+        ) : (
+          <ImageGallery photos={photos} onItemClick={onItemClick} />
+        )}
+        {loadMoreIsVisible && <Button onLoadMore={handleButton} />}
+        {isModalOpen && (
+          <Modal largeImageURL={largeImageURL} handleModal={handleModal} />
+        )}
+      </section>
+    </>
+  );
 }

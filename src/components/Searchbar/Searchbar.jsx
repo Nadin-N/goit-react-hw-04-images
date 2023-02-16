@@ -1,44 +1,40 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import css from './Searchbar.module.css';
 
-export class Searchbar extends Component {
-  state = {
-    keyWord: '',
+export function Searchbar({ onSubmit }) {
+  const [keyword, setKeyword] = useState('');
+
+  const handleInputChange = e => {
+    const { value } = e.target;
+    setKeyword(value);
   };
 
-  handleInputChange = e => {
-    const { value, name } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  handleFormSubmit = e => {
+  const handleFormSubmit = e => {
     e.preventDefault();
-    if (this.state.keyWord.trim() === '') {
+    if (keyword.trim() === '') {
       return;
     }
-    this.props.onSubmit(this.state.keyWord);
-    this.setState({ keyWord: '' });
+    onSubmit(keyword);
+    setKeyword('');
   };
 
-  render() {
-    return (
-      <header className={css.SearchBar}>
-        <form className={css.SearchForm} onSubmit={this.handleFormSubmit}>
-          <button type="submit" className={css.SearchFormButton}>
-            <span className={css.SearchFormButtonLabel}>Search</span>
-          </button>
-          <input
-            className={css.SearchFormInput}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            name="keyWord"
-            value={this.state.keyWord}
-            onChange={this.handleInputChange}
-          />
-        </form>
-      </header>
-    );
-  }
+  return (
+    <header className={css.SearchBar}>
+      <form className={css.SearchForm} onSubmit={handleFormSubmit}>
+        <button type="submit" className={css.SearchFormButton}>
+          <span className={css.SearchFormButtonLabel}>Search</span>
+        </button>
+        <input
+          className={css.SearchFormInput}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          name="keyWord"
+          value={keyword}
+          onChange={handleInputChange}
+        />
+      </form>
+    </header>
+  );
 }
