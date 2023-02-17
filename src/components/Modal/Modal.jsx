@@ -3,17 +3,17 @@ import css from './Modal.module.css';
 
 export function Modal({ largeImageURL, handleModal }) {
   useEffect(() => {
+    const handleKeydown = e => {
+      if (e.code === 'Escape') {
+        handleModal();
+      }
+    };
     window.addEventListener('keydown', handleKeydown);
     return () => {
       window.removeEventListener('keydown', handleKeydown);
     };
   }, [handleModal]);
 
-  const handleKeydown = e => {
-    if (e.code === 'Escape') {
-      handleModal();
-    }
-  };
   const handleBackDrop = e => {
     if (e.target === e.currentTarget) {
       handleModal();
